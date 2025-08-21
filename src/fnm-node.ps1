@@ -15,14 +15,11 @@
 
 
 # ----------------------------------------------------
-# Retrieve fnm environment and convert it to PSObject.
+# Look for .node-version or .nvmrc file within the repository and use
+# that version of Node.js, then retrieve the current fnm environment.
 # ----------------------------------------------------
-$fnm = fnm env --json | ConvertFrom-Json
-
-# ----------------------------------------------------
-# Get the active fnm-managed Node.js version.
-# ----------------------------------------------------
-$nodePath = (Resolve-Path $fnm.FNM_MULTISHELL_PATH).Path + "\node.exe"
+fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression | Out-Null
+$nodePath = $env:FNM_MULTISHELL_PATH + "\node.exe"
 
 # ----------------------------------------------------
 # Call the active fnm-managed Node.js and pass along any arguments
