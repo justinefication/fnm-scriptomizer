@@ -16,13 +16,10 @@
 :: ------------------------------------------------------
 @ECHO OFF
 
-:: ------------------------------------------------------
-::  Check if PowerShell Core exist and use it, otherwise
-::  fallback to legacy PowerShell.
-:: ------------------------------------------------------
-SET PWSH_DIR="C:\Program Files\PowerShell\7"
-IF EXIST %PWSH_DIR% (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "%~dp0fnm-node.ps1" %*
+IF EXIST .nvmrc (
+	fnm exec --using=.nvmrc node %*
+) ELSE IF EXIST .node-version (
+	fnm exec --using=.node-version node %*
 ) ELSE (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0fnm-node.ps1" %*
+	fnm exec --using=default node %*
 )
